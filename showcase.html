@@ -1,103 +1,680 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="css/site.css">
-<title>Aaron Brunckhurst – Project Showcase</title>
-<style>
-    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f4f4f4; color: #333; }
-    header { background: #2a2a2a; color: white; padding: 20px; text-align: center; }
-    .container { max-width: 1000px; margin: 30px auto; padding: 20px; background: white; border-radius: 10px; }
-    h2 { border-bottom: 2px solid #ddd; padding-bottom: 5px; }
-    .project { margin-bottom: 40px; }
-    .img-wrap { text-align: center; margin: 15px 0; }
-    img { max-width: 90%; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Aaron Brunckhurst – Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #f7f3ee;
+      --bg2:       #efe9e0;
+      --card:      #fdfaf6;
+      --border:    #ddd5c8;
+      --text:      #2e2820;
+      --muted:     #7a6e62;
+      --accent:    #c0622a;
+      --accent2:   #5a7a6e;
+      --accent3:   #8a6a2a;
+      --line:      #d4c8b8;
+      --shadow:    rgba(46,40,32,0.10);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    /* ── NOISE TEXTURE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.5;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      padding: 5rem 2rem 4rem;
+      text-align: center;
+      background: linear-gradient(160deg, #f0e6d8 0%, #e8ddd0 60%, #ddd4c4 100%);
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -60px; left: 50%;
+      transform: translateX(-50%);
+      width: 120px; height: 120px;
+      background: var(--bg);
+      border-radius: 50%;
+      border: 1px solid var(--border);
+    }
+
+    .hero-eyebrow {
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 1rem;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.1s;
+    }
+
+    .hero h1 {
+      font-family: 'Lora', serif;
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.15;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.25s;
+    }
+
+    .hero-tagline {
+      margin-top: 1rem;
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 520px;
+      margin-inline: auto;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.4s;
+    }
+
+    .hero-links {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 1.8rem;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.55s;
+    }
+
+    .hero-links a {
+      display: flex; align-items: center; gap: 0.45rem;
+      padding: 0.55rem 1.2rem;
+      border-radius: 100px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      transition: all 0.2s;
+      box-shadow: 0 2px 6px var(--shadow);
+    }
+    .hero-links a:hover {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+    .hero-links svg { width: 16px; height: 16px; }
+
+    /* ── ABOUT ── */
+    .about {
+      max-width: 700px;
+      margin: 5rem auto 0;
+      padding: 0 2rem;
+      text-align: center;
+    }
+    .about p {
+      font-size: 1.05rem;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    /* ── SKILLS ── */
+    .skills {
+      max-width: 860px;
+      margin: 3rem auto 0;
+      padding: 0 2rem;
+    }
+    .skills-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      justify-content: center;
+    }
+    .skill-group {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.2rem 1.5rem;
+      min-width: 180px;
+      box-shadow: 0 2px 8px var(--shadow);
+    }
+    .skill-group-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 0.7rem;
+    }
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+    .skill-tag {
+      font-size: 0.8rem;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 0.2rem 0.65rem;
+      color: var(--text);
+    }
+
+    /* ── SECTION HEADINGS ── */
+    .section-label {
+      text-align: center;
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+    .section-title {
+      text-align: center;
+      font-family: 'Lora', serif;
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 3.5rem;
+    }
+
+    /* ── TIMELINE ── */
+    .timeline-section {
+      max-width: 860px;
+      margin: 5rem auto 0;
+      padding: 0 2rem;
+    }
+
+    .timeline {
+      position: relative;
+      padding-bottom: 2rem;
+    }
+
+    /* vertical line */
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0; bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--accent) 0%, var(--line) 60%, transparent 100%);
+      transform: translateX(-50%);
+    }
+
+    .tl-item {
+      display: flex;
+      justify-content: flex-end;
+      padding-right: calc(50% + 36px);
+      margin-bottom: 2.5rem;
+      position: relative;
+      opacity: 0;
+      transform: translateX(-24px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .tl-item.right {
+      justify-content: flex-start;
+      padding-right: 0;
+      padding-left: calc(50% + 36px);
+      transform: translateX(24px);
+    }
+    .tl-item.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* dot on line */
+    .tl-dot {
+      position: absolute;
+      left: 50%;
+      top: 24px;
+      transform: translate(-50%, -50%);
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 3px solid var(--bg);
+      box-shadow: 0 0 0 2px var(--accent);
+      z-index: 1;
+    }
+    .tl-dot.green { background: var(--accent2); box-shadow: 0 0 0 2px var(--accent2); }
+    .tl-dot.gold  { background: var(--accent3); box-shadow: 0 0 0 2px var(--accent3); }
+
+    .tl-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 1.5rem 1.6rem;
+      max-width: 340px;
+      box-shadow: 0 4px 18px var(--shadow);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .tl-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px var(--shadow);
+    }
+
+    .tl-card.featured {
+      border-color: var(--accent);
+      border-width: 1.5px;
+    }
+
+    .tl-date {
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.3rem;
+    }
+    .tl-role {
+      font-family: 'Lora', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .tl-company {
+      font-size: 0.88rem;
+      color: var(--accent);
+      font-weight: 500;
+      margin-top: 0.15rem;
+      margin-bottom: 0.9rem;
+    }
+    .tl-bullets {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .tl-bullets li {
+      font-size: 0.86rem;
+      color: var(--muted);
+      padding-left: 1rem;
+      position: relative;
+      line-height: 1.5;
+    }
+    .tl-bullets li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-size: 0.78rem;
+    }
+    .tl-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-top: 1rem;
+    }
+    .tl-tag {
+      font-size: 0.73rem;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 0.15rem 0.6rem;
+      color: var(--muted);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      background: linear-gradient(135deg, #f0c060, #d4962a);
+      color: #fff;
+      border-radius: 100px;
+      padding: 0.2rem 0.7rem;
+      margin-top: 0.6rem;
+    }
+
+    /* project cards (smaller nodes) */
+    .tl-card.project {
+      border-style: dashed;
+      max-width: 300px;
+    }
+    .tl-card.project .tl-role {
+      font-size: 1rem;
+    }
+
+    /* project image */
+    .tl-img {
+      width: 100%;
+      border-radius: 10px;
+      margin-top: 0.8rem;
+      object-fit: cover;
+      max-height: 150px;
+      border: 1px solid var(--border);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      margin-top: 6rem;
+      padding: 3rem 2rem;
+      text-align: center;
+      border-top: 1px solid var(--border);
+      background: var(--bg2);
+    }
+    footer h2 {
+      font-family: 'Lora', serif;
+      font-size: 1.6rem;
+      margin-bottom: 0.5rem;
+    }
+    footer p {
+      color: var(--muted);
+      font-size: 0.93rem;
+      margin-bottom: 1.5rem;
+    }
+    .contact-links {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .contact-links a {
+      display: flex; align-items: center; gap: 0.4rem;
+      padding: 0.6rem 1.3rem;
+      border-radius: 100px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      transition: all 0.2s;
+      box-shadow: 0 2px 6px var(--shadow);
+    }
+    .contact-links a:hover {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+    .footer-note {
+      margin-top: 2rem;
+      font-size: 0.78rem;
+      color: var(--border);
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 700px) {
+      .timeline::before { left: 20px; }
+      .tl-item,
+      .tl-item.right {
+        justify-content: flex-start;
+        padding-left: 54px;
+        padding-right: 0;
+        transform: translateX(0);
+      }
+      .tl-dot { left: 20px; }
+      .tl-card, .tl-card.project { max-width: 100%; }
+    }
+  </style>
 </head>
 <body>
 
-<header>
-    <h1>Aaron Brunckhurst – Project Showcase</h1>
-    <p>Software Engineer | Embedded Systems | Rapid Prototyping | Vision & LLM Integration</p>
-
-    <div class="header">
-            <div class="social-icons">
-                <a href="https://www.linkedin.com/in/aaronbrunckhurst/" target="_blank">
-                    <img src="assets/linkedin.png">
-                </a>
-                <a href="https://github.com/AaronBrunckhurst" target="_blank">
-                    <img src="assets/github.svg">
-                </a>
-            </div>
-        </div>
-</header>
-
-<div class="container">    
-
-    <p>
-        Hi, I’m Aaron Brunckhurst. I’m a software engineer with extensive startup experience
-        across embedded systems, real-time applications, and desktop software. My work centers 
-        around designing systems that are simple, maintainable, and resilient. I enjoy breaking 
-        down complexity, improving reliability, and building tools and platforms that solve real 
-        problems while remaining easy to maintain long into the future.
-    </p>
-
-    <p>
-        Below is a sample of some of the projects I’ve worked on.
-    </p>
-
-    <div class="project">
-        <h2>Pinpoint AVL</h2>
-        <p>
-            As co‑founder and Lead Software Engineer, I led software‑in‑the‑loop testing and developed
-            much of the embedded firmware for the Pinpoint AVL system. The platform was deployed on
-            19 campus buses and provided real‑time location tracking, passenger counting, usage analytics, and
-            operational insights.
-        </p>
-        <div class="img-wrap">
-            <img class="small-img" src="assets/Pinpoint_Dispatch_map.png" alt="Pinpoint Dispatch Map">
-            <br><br>
-            <img src="assets/Pinpoint_Main_PCB.jpg" alt="Pinpoint Main PCB">
-        </div>
+  <!-- ── HERO ── -->
+  <header class="hero">
+    <p class="hero-eyebrow">Software Engineer · San Jose, CA</p>
+    <h1>Aaron Brunckhurst</h1>
+    <p class="hero-tagline">Building embedded systems, autonomous robots, and real‑time platforms that solve real problems.</p>
+    <div class="hero-links">
+      <a href="https://www.linkedin.com/in/aaronbrunckhurst/" target="_blank">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        LinkedIn
+      </a>
+      <a href="https://github.com/AaronBrunckhurst" target="_blank">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        GitHub
+      </a>
+      <a href="mailto:aaronbrunckhurst@gmail.com">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>
+        Email
+      </a>
     </div>
+  </header>
 
-    <div class="project">
-        <h2>Slugbotics ArmTeam</h2>
-        <p>
-            On ArmTeam, I led the integration of visual object identification and LLM‑based command
-            execution. This included real‑time computer vision pipelines, robotic control logic, and
-            natural‑language driven task execution for a 3D‑printed robotic arm.
-        </p>
-        <div class="img-wrap">
-            <img src="assets/Slugbotics_Armteam_Arm.jpg" alt="Slugbotics ArmTeam Arm">
+  <!-- ── ABOUT ── -->
+  <section class="about">
+    <p>I'm a software engineer with deep roots in embedded systems, real‑time applications, and desktop software. I enjoy breaking down complex problems into systems that are simple, maintainable, and built to last — from firmware running on microcontrollers to autonomous navigation stacks running on forklifts.</p>
+  </section>
+
+  <!-- ── SKILLS ── -->
+  <section class="skills" style="margin-top:2.5rem">
+    <div class="skills-grid">
+      <div class="skill-group">
+        <div class="skill-group-label">Languages</div>
+        <div class="skill-tags">
+          <span class="skill-tag">C</span><span class="skill-tag">C++</span><span class="skill-tag">C#</span><span class="skill-tag">Python</span><span class="skill-tag">Java</span>
         </div>
-    </div>
-
-    <div class="project">
-        <h2>Confab Agora</h2>
-        <p>
-            Confab Agora is a communications and game distribution platform created in C# and WPF.
-            It supports real-time voice and text chat, and served as the store and launcher for games
-            produced by Callen Games.
-        </p>
-        <div class="img-wrap">
-            <img src="assets/Confab_Agora_Main_Window.png" alt="Confab Agora Main Window">
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-label">Embedded</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Raspberry Pi</span><span class="skill-tag">Pi Pico</span><span class="skill-tag">CAN</span><span class="skill-tag">I2C</span><span class="skill-tag">UART</span><span class="skill-tag">SPI</span>
         </div>
-    </div>
-
-    <div class="project">
-        <h2>Wizards Duel</h2>
-        <p>
-            Wizards Duel is a turn-based pattern matching combat game where two wizards face off by
-            casting powerful spells. Inspired by the classic memory game *Simon*.
-        </p>
-        <div class="img-wrap">
-            <img src="assets/Wizards_Duel_main_screen.png" alt="Wizards Duel Main Screen">
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-label">Frameworks</div>
+        <div class="skill-tags">
+          <span class="skill-tag">ROS2</span><span class="skill-tag">OpenCV</span><span class="skill-tag">WPF</span><span class="skill-tag">.NET</span><span class="skill-tag">Unity3D</span>
         </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-label">AI / Cloud</div>
+        <div class="skill-tags">
+          <span class="skill-tag">LLM Toolcalling</span><span class="skill-tag">Computer Vision</span><span class="skill-tag">Google Cloud</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-label">Tools</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Git</span><span class="skill-tag">Linux</span><span class="skill-tag">CMake</span><span class="skill-tag">SolidWorks</span>
+        </div>
+      </div>
     </div>
+  </section>
 
-</div>
+  <!-- ── TIMELINE ── -->
+  <section class="timeline-section" style="margin-top:5rem">
+    <p class="section-label">Career & Projects</p>
+    <h2 class="section-title">My Journey</h2>
+
+    <div class="timeline">
+
+      <!-- Think Circuits -->
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-card featured">
+          <div class="tl-date">July 2025 – Present</div>
+          <div class="tl-role">Software Engineer</div>
+          <div class="tl-company">Think Circuits · San Jose, CA</div>
+          <ul class="tl-bullets">
+            <li>Developed perception, motion planning, and control logic enabling a forklift to achieve semi-autonomous navigation within one month.</li>
+            <li>Led development of an IP68-rated weatherproof camera system using embedded systems and CAD on an accelerated timeline.</li>
+            <li>Performed reliability testing on hardware in preparation for a 50,000-unit production run.</li>
+          </ul>
+          <div class="tl-stack">
+            <span class="tl-tag">Python</span><span class="tl-tag">ROS2</span><span class="tl-tag">Computer Vision</span><span class="tl-tag">Embedded</span><span class="tl-tag">CAD</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pinpoint AVL -->
+      <div class="tl-item right">
+        <div class="tl-dot"></div>
+        <div class="tl-card featured">
+          <div class="tl-date">2021 – Nov 2024</div>
+          <div class="tl-role">Co-Founder · Lead Software Engineer</div>
+          <div class="tl-company">PinpointAVL · UCSC Student Startup</div>
+          <ul class="tl-bullets">
+            <li>Deployed real-time vehicle tracking on 19 UCSC campus loop buses — firmware in C on Raspberry Pi Pico, server in C#/.NET Core.</li>
+            <li>Engineered a passenger counting solution using CAN communications, enabling data-driven routing decisions.</li>
+            <li>Led a team of 5 engineers; built hardware-in-loop testing that caught most logic errors before deployment.</li>
+          </ul>
+          <div class="badge">🏆 1st Place · UCSC Launchpad 2022 · $10,000</div>
+          <img class="tl-img" src="assets/Pinpoint_Dispatch_map.png" alt="Pinpoint Dispatch Map"/>
+          <div class="tl-stack">
+            <span class="tl-tag">C</span><span class="tl-tag">C#</span><span class="tl-tag">.NET Core</span><span class="tl-tag">Raspberry Pi Pico</span><span class="tl-tag">CAN</span><span class="tl-tag">GPS</span><span class="tl-tag">LTE</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slugbotics -->
+      <div class="tl-item">
+        <div class="tl-dot green"></div>
+        <div class="tl-card project">
+          <div class="tl-date">Project</div>
+          <div class="tl-role">Slugbotics Robotic Arm</div>
+          <div class="tl-company">Lead Developer, Vision Systems</div>
+          <ul class="tl-bullets">
+            <li>Built real-time object recognition with Python and OpenCV.</li>
+            <li>Integrated Llama 3.2 with toolcalling for conversational, natural-language task direction.</li>
+            <li>Used CoppeliaSim for physical simulation of robotic control logic.</li>
+          </ul>
+          <img class="tl-img" src="assets/Slugbotics_Armteam_Arm.jpg" alt="Slugbotics Arm"/>
+          <div class="tl-stack">
+            <span class="tl-tag">Python</span><span class="tl-tag">OpenCV</span><span class="tl-tag">Llama 3.2</span><span class="tl-tag">LLM Toolcalling</span><span class="tl-tag">ROS2</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grader -->
+      <div class="tl-item right">
+        <div class="tl-dot gold"></div>
+        <div class="tl-card project">
+          <div class="tl-date">Spring 2023</div>
+          <div class="tl-role">Grader</div>
+          <div class="tl-company">UC Santa Cruz · Principles of Computer Systems Design</div>
+          <ul class="tl-bullets">
+            <li>Graded assignments for a class of 300 students using CrowdGrader's computer vision tools.</li>
+          </ul>
+          <div class="tl-stack">
+            <span class="tl-tag">Computer Systems</span><span class="tl-tag">Computer Vision</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Confab Agora -->
+      <div class="tl-item">
+        <div class="tl-dot green"></div>
+        <div class="tl-card project">
+          <div class="tl-date">Project</div>
+          <div class="tl-role">Confab Agora</div>
+          <div class="tl-company">Real-time Communication Platform</div>
+          <ul class="tl-bullets">
+            <li>Real-time voice and text chat app in C# and WPF with user authentication and SQL data storage.</li>
+            <li>Implemented text transmission over TCP and voice over UDP; also served as a game store and launcher for Callen Games.</li>
+          </ul>
+          <img class="tl-img" src="assets/Confab_Agora_Main_Window.png" alt="Confab Agora"/>
+          <div class="tl-stack">
+            <span class="tl-tag">C#</span><span class="tl-tag">WPF</span><span class="tl-tag">SQL</span><span class="tl-tag">TCP</span><span class="tl-tag">UDP</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- WVC Makerspace -->
+      <div class="tl-item right">
+        <div class="tl-dot gold"></div>
+        <div class="tl-card project">
+          <div class="tl-date">Project</div>
+          <div class="tl-role">WVC Makerspace</div>
+          <div class="tl-company">West Valley College</div>
+          <ul class="tl-bullets">
+            <li>Secured school funding to create a campus makerspace, enabling 3D printing classes and supporting student projects.</li>
+          </ul>
+          <div class="tl-stack">
+            <span class="tl-tag">3D Printing</span><span class="tl-tag">Community</span><span class="tl-tag">Leadership</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── EDUCATION ── -->
+  <section style="max-width:700px;margin:4rem auto 0;padding:0 2rem;text-align:center;">
+    <p class="section-label">Education</p>
+    <h2 class="section-title" style="margin-bottom:1.5rem">Academic Background</h2>
+    <div style="display:flex;flex-direction:column;gap:1rem;">
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.2rem 1.5rem;text-align:left;box-shadow:0 2px 8px var(--shadow);">
+        <div style="font-family:'Lora',serif;font-size:1rem;font-weight:600;">B.A. Computer Science <span style="color:var(--accent);font-size:0.85rem;font-weight:400;margin-left:0.4rem;">Honors</span></div>
+        <div style="font-size:0.85rem;color:var(--muted);margin-top:0.2rem;">University of California, Santa Cruz · 2021–2023</div>
+        <div style="font-size:0.8rem;color:var(--muted);margin-top:0.3rem;">Computer System Design · Parallel Programming · Computer Architecture · Open Source Programming</div>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.2rem 1.5rem;text-align:left;box-shadow:0 2px 8px var(--shadow);">
+        <div style="font-family:'Lora',serif;font-size:1rem;font-weight:600;">A.S. Computer Information Systems <span style="color:var(--accent);font-size:0.85rem;font-weight:400;margin-left:0.4rem;">Honors</span></div>
+        <div style="font-size:0.85rem;color:var(--muted);margin-top:0.2rem;">Mission College · 2015–2021</div>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.2rem 1.5rem;text-align:left;box-shadow:0 2px 8px var(--shadow);">
+        <div style="font-family:'Lora',serif;font-size:1rem;font-weight:600;">A.A. Science & Math <span style="color:var(--accent);font-size:0.85rem;font-weight:400;margin-left:0.4rem;">Honors</span></div>
+        <div style="font-size:0.85rem;color:var(--muted);margin-top:0.2rem;">West Valley College · 2015–2021</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <h2>Let's Connect</h2>
+    <p>Open to new opportunities in embedded systems, robotics, and real-time software.</p>
+    <div class="contact-links">
+      <a href="mailto:aaronbrunckhurst@gmail.com">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>
+        aaronbrunckhurst@gmail.com
+      </a>
+      <a href="https://www.linkedin.com/in/aaronbrunckhurst/" target="_blank">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        LinkedIn
+      </a>
+      <a href="https://github.com/AaronBrunckhurst" target="_blank">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        GitHub
+      </a>
+      <a href="tel:+14083691155">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/></svg>
+        (408) 369-1155
+      </a>
+    </div>
+    <p class="footer-note">© 2025 Aaron Brunckhurst</p>
+  </footer>
+
+  <script>
+    // scroll-triggered reveal for timeline items
+    const items = document.querySelectorAll('.tl-item');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    items.forEach(el => io.observe(el));
+  </script>
 
 </body>
 </html>
